@@ -8,6 +8,7 @@ import re
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
+import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from custom_transformers import CleanAndStemTweets
