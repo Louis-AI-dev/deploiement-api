@@ -1,5 +1,5 @@
 import unittest
-#import numpy as np
+import numpy as np
 from api import preprocess_and_predict
 import nltk
 import sys
