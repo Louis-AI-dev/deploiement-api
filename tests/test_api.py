@@ -4,7 +4,7 @@ from api import preprocess_and_predict
 import nltk
 import sys
 import os
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from custom_transformers import CleanAndStemTweets
 
 # Initialiser les outils
