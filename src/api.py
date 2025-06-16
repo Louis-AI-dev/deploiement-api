@@ -41,11 +41,16 @@ except Exception as e:
     preprocessor = None
 
 def preprocess_and_predict(texts):
+    logger.info(f"Texte reçu: {texts}")
     cleaned = preprocessor.transform(texts)
+    logger.info(f"Texte cleaned: {cleaned}")
     sequences = tokenizer.texts_to_sequences(cleaned)
+    logger.info(f"Texte sequences: {sequences}")
     padded = tf.keras.preprocessing.sequence.pad_sequences(sequences, maxlen=50, padding='post')
+    logger.info(f"Texte pad: {padded}")
     proba = model.predict(padded)
     predictions = (proba >= 0.5).astype(int)  # convertit les probabilités en 0 ou 1
+    logger.info(f"Prédictions = {predictions}")
     return predictions
 
 # Endpoint /predict

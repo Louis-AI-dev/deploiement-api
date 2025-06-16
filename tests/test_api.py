@@ -15,7 +15,7 @@ nltk.download('omw-1.4')
 
 class APITestCase(unittest.TestCase):
     def test_prediction_format(self):
-        result = preprocess_and_predict(["This is a test tweet"])
+        result = preprocess_and_predict(["I really hate summer, it's too hot!"])
         self.assertTrue(isinstance(result, (list, tuple, np.ndarray)))
 
 if __name__ == '__main__':
