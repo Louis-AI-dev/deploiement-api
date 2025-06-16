@@ -8,6 +8,7 @@ import re
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
+from custom_transformers import CleanAndStemTweets
 
 # Configuration du logger
 logger = logging.getLogger(__name__)
@@ -15,25 +16,6 @@ logger.setLevel(logging.INFO)
 
 # Initialiser l'application Flask
 app = Flask(__name__)
-
-class CleanAndStemTweets(BaseEstimator, TransformerMixin):
-    def __init__(self):
-        self.tokenizer = TweetTokenizer(preserve_case=False, strip_handles=True, reduce_len=True)
-        self.stop_words = set(stopwords.words("english"))
-        self.stemmer = PorterStemmer()
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        cleaned = []
-        for tweet in X:
-            tweet = re.sub(r"http\S+|www\S+|https\S+", '', tweet)
-            tokens = self.tokenizer.tokenize(tweet)
-            tokens = [t for t in tokens if t.isalpha() and t not in self.stop_words]
-            stems = [self.stemmer.stem(t) for t in tokens]
-            cleaned.append(' '.join(stems))  # Option : retourne une chaîne pour compatibilité tokenizer
-        return cleaned
     
 # Charger le modèle TensorFlow, tokenizer et preprocessor au démarrage
 model_path = "./run_stem_LSTM_05-06-2025_12-16/best_model.h5"
@@ -96,3 +78,5 @@ def predict():
         logger.error(f"Erreur lors de la prédiction : {str(e)}", exc_info=True)
         return jsonify({'error': str(e)}), 400
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000)
