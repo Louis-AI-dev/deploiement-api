@@ -53,6 +53,10 @@ def preprocess_and_predict(texts):
     logger.info(f"Prédictions = {predictions}")
     return predictions
 
+@app.route('/')
+def hello():
+    return 'Hello depuis Azure !'
+
 # Endpoint /predict
 @app.route('/predict', methods=['POST'])
 def predict():
