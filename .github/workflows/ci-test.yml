@@ -24,13 +24,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: ➕ Ajouter src/ au PYTHONPATH
+      run: |
+        echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+
     - name: 📁 Vérifie que les fichiers importants existent
       run: |
-        test -f api.py
+        test -f src/api.py
         test -f run_stem_LSTM_05-06-2025_12-16/best_model.h5
         test -f run_stem_LSTM_05-06-2025_12-16/tokenizer.pkl
         test -f run_stem_LSTM_05-06-2025_12-16/preprocessor.pkl
 
-    - name: 🚀 Lancer un test simple sur l'API
+    - name: 🧪 Lancer les tests unitaires
       run: |
         python -m unittest discover tests/
