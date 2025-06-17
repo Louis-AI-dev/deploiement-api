@@ -12,7 +12,19 @@ import os
 #sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from custom_transformers import CleanAndStemTweets
 import pickle
-    
+
+def print_tree(start_path='.'):
+    for root, dirs, files in os.walk(start_path):
+        level = root.replace(start_path, '').count(os.sep)
+        indent = ' ' * 4 * (level)
+        print(f'{indent}{os.path.basename(root)}/')
+        subindent = ' ' * 4 * (level + 1)
+        for f in files:
+            print(f'{subindent}{f}')
+
+print("=== Arborescence au démarrage de l'API ===")
+print_tree('.')  # ou 'src' si tu veux cibler uniquement ce dossier
+
 # Configuration du logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
