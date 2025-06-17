@@ -20,10 +20,13 @@ logger.setLevel(logging.INFO)
 # Initialiser l'application Flask
 app = Flask(__name__)
     
-# Charger le modèle TensorFlow, tokenizer et preprocessor au démarrage
-model_path = "../run_stem_LSTM_05-06-2025_12-16/best_model.h5"
-tokenizer_path = "../run_stem_LSTM_05-06-2025_12-16/tokenizer.pkl"
-preprocessor_path = "../run_stem_LSTM_05-06-2025_12-16/preprocessor.pkl"
+# Chemin absolu vers le dossier parent de api.py
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+# Chemins vers les fichiers
+model_path = os.path.join(BASE_DIR, "run_stem_LSTM_05-06-2025_12-16", "best_model.h5")
+tokenizer_path = os.path.join(BASE_DIR, "run_stem_LSTM_05-06-2025_12-16", "tokenizer.pkl")
+preprocessor_path = os.path.join(BASE_DIR, "run_stem_LSTM_05-06-2025_12-16", "preprocessor.pkl")
 
 try:
     logger.info("Chargement du modèle TensorFlow...")
