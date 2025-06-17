@@ -13,17 +13,12 @@ import os
 from custom_transformers import CleanAndStemTweets
 import pickle
 
-def print_tree(start_path='.'):
+def get_tree(start_path='.'):
+    tree = {}
     for root, dirs, files in os.walk(start_path):
-        level = root.replace(start_path, '').count(os.sep)
-        indent = ' ' * 4 * (level)
-        print(f'{indent}{os.path.basename(root)}/')
-        subindent = ' ' * 4 * (level + 1)
-        for f in files:
-            print(f'{subindent}{f}')
-
-print("=== Arborescence au démarrage de l'API ===")
-print_tree('.')  # ou 'src' si tu veux cibler uniquement ce dossier
+        path = root.replace(start_path, '').lstrip(os.sep)
+        tree[path] = files
+    return tree
 
 # Configuration du logger
 logger = logging.getLogger(__name__)
@@ -67,6 +62,11 @@ def preprocess_and_predict(texts):
     predictions = (proba >= 0.5).astype(int)  # convertit les probabilités en 0 ou 1
     logger.info(f"Prédictions = {predictions}")
     return predictions
+
+@app.route('/list-files')
+def list_files():
+    tree = get_tree('.')  # ou 'src' si tu veux
+    return jsonify(tree)
 
 @app.route('/')
 def hello():
