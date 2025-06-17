@@ -10,7 +10,7 @@ from nltk.stem import PorterStemmer
 import sys
 import os
 #sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from custom_transformers import CleanAndStemTweets
+from src.custom_transformers import CleanAndStemTweets
 import pickle
 
 def get_tree(start_path='.'):
