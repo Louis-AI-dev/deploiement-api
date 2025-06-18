@@ -17,6 +17,13 @@ import pickle
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+# Empêche l’ajout multiple de handlers si le fichier est importé ailleurs
+if not logger.hasHandlers():
+    handler = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
 # Initialiser l'application Flask
 app = Flask(__name__)
     
