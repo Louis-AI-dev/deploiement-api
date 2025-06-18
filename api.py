@@ -13,13 +13,6 @@ import os
 from src.custom_transformers import CleanAndStemTweets
 import pickle
 
-def get_tree(start_path='.'):
-    tree = {}
-    for root, dirs, files in os.walk(start_path):
-        path = root.replace(start_path, '').lstrip(os.sep)
-        tree[path] = files
-    return tree
-
 # Configuration du logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -28,7 +21,7 @@ logger.setLevel(logging.INFO)
 app = Flask(__name__)
     
 # Chemin absolu vers le dossier parent de api.py
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 
 # Chemins vers les fichiers
 model_path = os.path.join(BASE_DIR, "run_stem_LSTM_05-06-2025_12-16", "best_model.h5")
@@ -62,11 +55,6 @@ def preprocess_and_predict(texts):
     predictions = (proba >= 0.5).astype(int)  # convertit les probabilités en 0 ou 1
     logger.info(f"Prédictions = {predictions}")
     return predictions
-
-@app.route('/list-files')
-def list_files():
-    tree = get_tree('.')  # ou 'src' si tu veux
-    return jsonify(tree)
 
 @app.route('/')
 def hello():
