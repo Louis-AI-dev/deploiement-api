@@ -22,15 +22,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 if not logger.hasHandlers():
-    # Envoi vers Application Insights
-    handler = AzureLogHandler(connection_string=INSTRUMENTATION_KEY)
-    handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    handler = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
     logger.addHandler(handler)
-
-    # Affichage local / console (utile aussi sur Azure log stream)
-    console = logging.StreamHandler(sys.stdout)
-    console.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-    logger.addHandler(console)
 
 # Initialiser l'application Flask
 app = Flask(__name__)
