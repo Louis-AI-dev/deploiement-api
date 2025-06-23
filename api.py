@@ -35,7 +35,7 @@ if not logger.hasHandlers():
 # Initialiser l'application Flask
 app = Flask(__name__)
     
-# Chemin absolu vers le dossier parent de api.py
+# Chemin absolu vers le dossier de api.py
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 
 # Chemins vers les fichiers
