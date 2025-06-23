@@ -15,15 +15,18 @@ import pickle
 
 print("Début chargement modèle...")
 
-# Configuration simple du logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()  # root logger
 logger.setLevel(logging.INFO)
 
-if not logger.hasHandlers():
-    handler = logging.StreamHandler(sys.stdout)
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+# Supprime tous les handlers existants (au cas où)
+for h in logger.handlers[:]:
+    logger.removeHandler(h)
+
+# Ajoute un handler vers la sortie standard
+handler = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 # Test de log
 logger.info("Logger initialisé. Prêt à logger dans Azure Log Stream 🎯")
