@@ -5,3 +5,4 @@ joblib
 nltk
 gunicorn==21.2.0
 numpy
+opencensus-ext-azure
