@@ -12,17 +12,25 @@ import os
 #sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.custom_transformers import CleanAndStemTweets
 import pickle
+from opencensus.ext.azure.log_exporter import AzureLogHandler
+
+# Azure Application Insights instrumentation key
+INSTRUMENTATION_KEY = "InstrumentationKey=68662f8a-4188-429b-9594-295cf7f12c30"
 
 # Configuration du logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-# Empêche l’ajout multiple de handlers si le fichier est importé ailleurs
 if not logger.hasHandlers():
-    handler = logging.StreamHandler(sys.stdout)
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
+    # Envoi vers Application Insights
+    handler = AzureLogHandler(connection_string=INSTRUMENTATION_KEY)
+    handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
     logger.addHandler(handler)
+
+    # Affichage local / console (utile aussi sur Azure log stream)
+    console = logging.StreamHandler(sys.stdout)
+    console.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    logger.addHandler(console)
 
 # Initialiser l'application Flask
 app = Flask(__name__)
@@ -99,6 +107,15 @@ def predict():
     except Exception as e:
         logger.error(f"Erreur lors de la prédiction : {str(e)}", exc_info=True)
         return jsonify({'error': str(e)}), 400
+    
+@app.route('/report-wrong-prediction', methods=['POST'])
+def report_wrong_prediction():
+    data = request.get_json()
+    tweet = data.get("text")
+    prediction = data.get("prediction")
+    logger.warning(f"TWEET MAL PREDIT : '{tweet}' --> Prediction: {prediction}")
+    return jsonify({"message": "Signalement enregistré"}), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
