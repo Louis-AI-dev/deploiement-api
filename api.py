@@ -12,12 +12,10 @@ import os
 #sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.custom_transformers import CleanAndStemTweets
 import pickle
-from opencensus.ext.azure.log_exporter import AzureLogHandler
 
-# Azure Application Insights instrumentation key
-INSTRUMENTATION_KEY = "InstrumentationKey=68662f8a-4188-429b-9594-295cf7f12c30"
+print("Début chargement modèle...")
 
-# Configuration du logger
+# Configuration simple du logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -26,6 +24,9 @@ if not logger.hasHandlers():
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
+
+# Test de log
+logger.info("Logger initialisé. Prêt à logger dans Azure Log Stream 🎯")
 
 # Initialiser l'application Flask
 app = Flask(__name__)
