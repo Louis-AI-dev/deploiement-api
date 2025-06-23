@@ -3,6 +3,6 @@ tensorflow==2.16.2
 scikit-learn
 joblib
 nltk
-gunicorn==21.2.0
+gunicorn==23.0.0
 numpy
 opencensus-ext-azure
