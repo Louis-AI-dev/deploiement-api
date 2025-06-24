@@ -13,7 +13,7 @@ import os
 from src.custom_transformers import CleanAndStemTweets
 import pickle
 
-print("Début chargement modèle...")
+from opencensus.ext.azure.log_exporter import AzureLogHandler
 
 logger = logging.getLogger()  # root logger
 logger.setLevel(logging.INFO)
@@ -22,11 +22,24 @@ logger.setLevel(logging.INFO)
 for h in logger.handlers[:]:
     logger.removeHandler(h)
 
-# Ajoute un handler vers la sortie standard
-handler = logging.StreamHandler(sys.stdout)
+# Formatter commun
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+
+# Handler console (stdout)
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setFormatter(formatter)
+logger.addHandler(stream_handler)
+
+# Handler Azure Application Insights (via instrumentation key ou connection string)
+connection_string = os.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING")
+if connection_string:
+    azure_handler = AzureLogHandler(connection_string=connection_string)
+    azure_handler.setFormatter(formatter)
+    logger.addHandler(azure_handler)
+    logger.info("Azure Application Insights configuré avec succès.")
+else:
+    logger.warning("InstrumentationKey manquant : les logs ne seront pas envoyés à Azure Application Insights.")
+
 
 # Test de log
 logger.info("Logger initialisé. Prêt à logger dans Azure Log Stream 🎯")
